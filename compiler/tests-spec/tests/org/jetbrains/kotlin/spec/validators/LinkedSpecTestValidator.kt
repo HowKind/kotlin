@@ -60,7 +60,7 @@ class LinkedSpecTestValidator(testDataFile: File) : AbstractSpecTestValidator<Li
 
     companion object : SpecTestValidatorHelperObject {
         override val pathPartRegex =
-            """${SpecTestLinkedType.LINKED.testDataPath}$pathSeparator(?<sections>(?:[\w-]+)(?:/[\w-]+)*?)${pathSeparator}p-(?<paragraphNumber>$INTEGER_REGEX)"""
+            """${SpecTestLinkedType.LINKED.testDataPath}$pathSeparator(?<sections>(?:[\w-]+)(?:$pathSeparator[\w-]+)*?)${pathSeparator}p-(?<paragraphNumber>$INTEGER_REGEX)"""
         override val filenameRegex = """(?<sentenceNumber>$INTEGER_REGEX)\.(?<testNumber>$INTEGER_REGEX)\.kt"""
         override fun getPathPattern(): Pattern = Pattern.compile(testPathRegexTemplate.format(pathPartRegex, filenameRegex))
     }

@@ -114,14 +114,14 @@ abstract class AbstractSpecTestValidator<T : AbstractSpecTest>(private val testD
         private val testCaseInfoRegex = """(?<infoElements>CASE DESCRIPTION:[\s\S]*?$lineSeparator)$lineSeparator*"""
         private val testPathBaseRegexTemplate =
             """^.*?$pathSeparator(?<testArea>diagnostics|psi|(?:codegen${pathSeparator}box))$pathSeparator%s"""
-        val testPathRegexTemplate = """$testPathBaseRegexTemplate$pathSeparator(?<testType>pos|neg)/%s$"""
+        val testPathRegexTemplate = """$testPathBaseRegexTemplate$pathSeparator(?<testType>pos|neg)$pathSeparator%s$"""
         val testCaseInfoSingleLinePattern: Pattern = Pattern.compile(SINGLELINE_COMMENT_REGEX.format(testCaseInfoRegex))
         val testCaseInfoMultilinePattern: Pattern = Pattern.compile(MULTILINE_COMMENT_REGEX.format(testCaseInfoRegex))
 
         fun getInstanceByType(testFile: File) = when {
-            Pattern.compile(testPathBaseRegexTemplate.format(LinkedSpecTestValidator.pathPartRegex)).matcher(testFile.absolutePath).find() ->
+            Pattern.compile(testPathBaseRegexTemplate.format(LinkedSpecTestValidator.pathPartRegex)).matcher(testFile.canonicalPath).find() ->
                 LinkedSpecTestValidator(testFile)
-            Pattern.compile(testPathBaseRegexTemplate.format(NotLinkedSpecTestValidator.pathPartRegex)).matcher(testFile.absolutePath).find() ->
+            Pattern.compile(testPathBaseRegexTemplate.format(NotLinkedSpecTestValidator.pathPartRegex)).matcher(testFile.canonicalPath).find() ->
                 NotLinkedSpecTestValidator(testFile)
             else -> throw SpecTestValidationException(SpecTestValidationFailedReason.FILENAME_NOT_VALID)
         }
